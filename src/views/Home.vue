@@ -9,7 +9,10 @@
         <div class="card border-info">
           <div class="card-body readMeSection text-left">
             <h3 class="d-flex align-items-center justify-content-between">
-              <span>Welcome to the {{title}} Testing Tool.</span>
+              <span>Welcome</span>
+              <button class="btn btn-secondary" @click="runAll">
+                <span>Run All Suites</span>
+              </button>
             </h3>
             <div>
               <em class="action text-info" @click="toggleReadme">{{readMe ? 'close':'view'}} readme</em>
@@ -51,7 +54,6 @@
     </div>
 
     <auth v-if="usesAuth" />
-
     <div class="row" v-for="s in suites" :key="s.name">
       <div class="col-12">
         <suite :suite="s" />
@@ -92,6 +94,13 @@ export default {
     toggleReadme() {
       this.readMe = !this.readMe;
       window.localStorage.setItem(this.title, this.readMe);
+    },
+    runAll() {
+      try {
+        Promise.all(this.suites.map(s => s.runTests.call(s)));
+      } catch (e) {
+        console.error(e);
+      }
     }
   },
   components: {

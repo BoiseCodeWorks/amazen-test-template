@@ -53,6 +53,7 @@ export class Suite {
   constructor(name, description, path) {
     this.name = name
     this.running = false
+    this.success = false
     this.description = description
     this.tests = []
     this.path = path
@@ -72,6 +73,7 @@ export class Suite {
       console.error(e)
     } finally {
       this.running = false
+      this.success = this.tests.find(t => !t.success) ? false : true
     }
   }
 

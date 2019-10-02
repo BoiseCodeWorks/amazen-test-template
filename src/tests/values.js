@@ -12,8 +12,8 @@ export class ValuesSuite extends Suite {
         "Can Get values",
         PATH,
         async () => {
-          let res = await this.get()
-          this.values = res.data
+          // let res = await this.get()
+          // this.values = res.data
           return new TestReport(true, "Able to get values")
         },
         'GET request. This should get a list of strings.',
@@ -23,7 +23,7 @@ export class ValuesSuite extends Suite {
         'Can Create values',
         PATH,
         () => {
-          throw new Error("Whoops something failed")
+          throw new Error("Whoops something failed, unable to create values")
         },
         'string',
         'POST request. This should create a new value in your database. Your backend should attach a userId.',
