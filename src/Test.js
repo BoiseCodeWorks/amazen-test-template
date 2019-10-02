@@ -1,0 +1,100 @@
+import { api } from "./utils"
+import store from "./store"
+export class Test {
+  /**
+   * 
+   * @param {string} name 
+   * @param {string} path 
+   * @param {function} testFn 
+   * @param {string} description 
+   * @param {string} expected 
+   * @param {string} payload 
+   */
+  constructor(name, path, testFn, description = "", expected = "", payload = "") {
+    if (typeof testFn != 'function') { throw new Error("Invalid Test Registration") }
+    this.success = false
+    this.running = false
+    this.message = ""
+    this.name = name
+    this.path = path
+    this.routeInfo = {
+      path,
+      expected,
+      description
+    }
+    this.payload = payload
+    this.runTest = testFn
+  }
+  async execute() {
+    try {
+      this.message = ""
+      this.success = false
+      this.running = true
+      let res = await this.runTest()
+      this.success = res.status
+      this.message = res.message
+    } catch (e) {
+      console.error(e)
+      this.message = e.message
+    } finally {
+      this.running = false
+    }
+  }
+}
+
+export class TestReport {
+  constructor(status, message) {
+    this.status = status
+    this.message = message
+  }
+}
+
+export class Suite {
+  constructor(name, description, path) {
+    this.name = name
+    this.running = false
+    this.description = description
+    this.tests = []
+    this.path = path
+    store.commit("addSuite", this)
+  }
+
+  addTests() {
+    this.tests.length = 0
+    this.tests.push(...arguments)
+  }
+
+  async runTests() {
+    this.running = true
+    try {
+      await Promise.all(this.tests.map(t => t.execute.call(t)))
+    } catch (e) {
+      console.error(e)
+    } finally {
+      this.running = false
+    }
+  }
+
+  async get() {
+    let res = await api.post(this.path)
+    return res.data
+  }
+  async create(payload) {
+    let res = await api.post(this.path, payload)
+    return res.data
+  }
+  async getById({ commit, dispatch, state }, id) {
+    let res = await api.get(`${this.path}/` + id)
+    return res.data
+  }
+  async update({ commit, dispatch }, payload) {
+    let res = await api.put(`${this.path}/` + payload.id || payload._id, payload)
+    return res.data
+  }
+  async delete({ commit, dispatch, state }, payload) {
+    let res = await api.delete(`${this.path}/` + payload.id || payload._id)
+    return res.data
+  }
+
+
+}
