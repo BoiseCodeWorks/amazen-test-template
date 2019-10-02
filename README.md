@@ -14,7 +14,7 @@ const PATH = "values"
 
 export class ValuesSuite extends Suite {
   constructor() {
-    super("ValuesController", "This is a test Controller", "values")
+    super("ValuesController", "This is a test Controller", PATH)
     this.addTests(
       new Test(
         "Can Get values",
