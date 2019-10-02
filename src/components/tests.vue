@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto p-1 rounded mb-2">
+  <div>
     <div
       class="card mb-1"
       v-for="test in tests"

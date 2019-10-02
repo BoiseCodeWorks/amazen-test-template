@@ -32,8 +32,8 @@ export class ValuesSuite extends Suite {
       new Test(
         'Can Get value by value Id',
         PATH + '/:id',
-        () => {
-
+        async () => {
+          let res = await this.getById("123")
         },
         'string',
         'GET request. This should get one value by its id.'
@@ -53,7 +53,6 @@ export class ValuesSuite extends Suite {
         async () => {
           let res = await api.get("https://api.boisecodeworks.com/courses")
           return new TestReport(true, "Woot able to delete value successfully")
-
         },
         'string',
         'DELETE request. This should delete one value by its id.'

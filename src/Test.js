@@ -83,15 +83,15 @@ export class Suite {
     let res = await api.post(this.path, payload)
     return res.data
   }
-  async getById({ commit, dispatch, state }, id) {
+  async getById(id) {
     let res = await api.get(`${this.path}/` + id)
     return res.data
   }
-  async update({ commit, dispatch }, payload) {
+  async update(payload) {
     let res = await api.put(`${this.path}/` + payload.id || payload._id, payload)
     return res.data
   }
-  async delete({ commit, dispatch, state }, payload) {
+  async delete(payload) {
     let res = await api.delete(`${this.path}/` + payload.id || payload._id)
     return res.data
   }
