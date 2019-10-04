@@ -78,7 +78,7 @@ export class Suite {
   }
 
   async get() {
-    let res = await api.post(this.path)
+    let res = await api.get(this.path)
     return res.data
   }
   async create(payload) {
