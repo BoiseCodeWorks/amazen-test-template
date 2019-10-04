@@ -36,6 +36,9 @@ export class Test {
     } catch (e) {
       console.error(e)
       this.message = e.message
+      if(e.response && e.response.data){
+        this.message += " :: " + e.response.data
+      }
     } finally {
       this.running = false
     }
@@ -68,7 +71,11 @@ export class Suite {
   async runTests() {
     this.running = true
     try {
-      await Promise.all(this.tests.map(t => t.execute.call(t)))
+      for (let i = 0; i < this.tests.length; i++) {
+        const test = this.tests[i];
+        await test.execute.call(test)
+      }
+      // await Promise.all(this.tests.map(t => t.execute.call(t)))
     } catch (e) {
       console.error(e)
     } finally {
